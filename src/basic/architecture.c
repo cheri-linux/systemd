@@ -112,7 +112,7 @@ int uname_architecture(void) {
                 { "riscv64",    ARCHITECTURE_RISCV64  },
 #  if __SIZEOF_POINTER__ == 4
                 { "riscv",      ARCHITECTURE_RISCV32  },
-#  elif __SIZEOF_POINTER__ == 8
+#  elif __SIZEOF_POINTER__ == 8 || defined(__CHERI__)
                 { "riscv",      ARCHITECTURE_RISCV64  },
 #  endif
 #elif defined(__arc__)

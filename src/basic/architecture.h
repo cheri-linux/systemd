@@ -215,7 +215,7 @@ int uname_architecture(void);
 #  if __SIZEOF_POINTER__ == 4
 #    define native_architecture() ARCHITECTURE_RISCV32
 #    define LIB_ARCH_TUPLE "riscv32-linux-gnu"
-#  elif __SIZEOF_POINTER__ == 8
+#  elif __SIZEOF_POINTER__ == 8 || defined(__CHERI__)
 #    define native_architecture() ARCHITECTURE_RISCV64
 #    define LIB_ARCH_TUPLE "riscv64-linux-gnu"
 #  else
