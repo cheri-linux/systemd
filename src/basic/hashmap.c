@@ -154,7 +154,11 @@ enum HashmapType {
         _HASHMAP_TYPE_MAX
 };
 
-struct _packed_ indirect_storage {
+struct 
+#ifndef __CHERI_PURE_CAPABILITY__
+_packed_
+#endif
+indirect_storage {
         void *storage;                     /* where buckets and DIBs are stored */
         uint8_t  hash_key[HASH_KEY_SIZE];  /* hash key; changes during resize */
 
@@ -164,8 +168,27 @@ struct _packed_ indirect_storage {
         unsigned idx_lowest_entry;         /* Index below which all buckets are free.
                                               Makes "while(hashmap_steal_first())" loops
                                               O(n) instead of O(n^2) for unordered hashmaps. */
+        #ifndef __CHERI_PURE_CAPABILITY__
         uint8_t  _pad[3];                  /* padding for the whole HashmapBase */
         /* The bitfields in HashmapBase complete the alignment of the whole thing. */
+        #else
+        /* The indirect_storage structure is used to determine the size of the
+         * direct_storage byte array. This byte array must at least be large
+         * enough to hold one struct ordered_hashmap_entry. For Cheri,
+         * ordered_hashmap_entry gets so big that it does not fit anymore
+         * (together with a dib_raw_t). Hence, we must enlarge indirect_storage
+         * with padding... */
+        /* At this point the struct is 16+16+4+4+4=44 bytes and would get
+         * aligned to 48 bytes. Therefore, we must at least add 5 bytes to get
+         * the structure aligned to 64 bytes*/
+        uint8_t _pad[5];
+        /* TODO cheri: alternatively, to stay closer to the original code and
+         * save space, we could use a packed structure and pad to 63 bytes.
+         * But then, we would have to forcefully ignore the cheri-warnings
+         * about the packed, unaligned struct here, and make sure that it
+         * really works... */
+        //uint8_t _pad[19];
+        #endif
 };
 
 struct direct_storage {
@@ -194,7 +217,11 @@ static uint8_t shared_hash_key[HASH_KEY_SIZE];
 struct HashmapBase {
         const struct hash_ops *hash_ops;  /* hash and compare ops to use */
 
-        union _packed_ {
+        union 
+        #ifndef __CHERI_PURE_CAPABILITY__
+        _packed_
+        #endif
+        {
                 struct indirect_storage indirect; /* if  has_indirect */
                 struct direct_storage direct;     /* if !has_indirect */
         };
