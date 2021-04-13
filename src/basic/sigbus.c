@@ -82,7 +82,7 @@ int sigbus_pop(void **ret) {
 }
 
 static void sigbus_handler(int sn, siginfo_t *si, void *data) {
-        unsigned long ul;
+        uintptr_t ul;
         void *aligned;
 
         assert(sn == SIGBUS);
@@ -94,7 +94,7 @@ static void sigbus_handler(int sn, siginfo_t *si, void *data) {
                 return;
         }
 
-        ul = (unsigned long) si->si_addr;
+        ul = (uintptr_t) si->si_addr;
         ul = ul / page_size();
         ul = ul * page_size();
         aligned = (void*) ul;

@@ -1401,7 +1401,9 @@ static void *message_extend_body(
                 }
         } else
                 /* Return something that is not NULL and is aligned */
-                p = (uint8_t*) align;
+                /* Cheri note: the returned pointer does not seem to be used, so
+                 * this is ok. Silence warning with cast to uintptr. */
+                p = (uint8_t*) (uintptr_t) align;
 
         m->body_size = end_body;
         message_extend_containers(m, added);
@@ -4817,7 +4819,9 @@ _public_ int sd_bus_message_read_array(
         if (sz == 0)
                 /* Zero length array, let's return some aligned
                  * pointer that is not NULL */
-                p = (uint8_t*) align;
+                /* Cheri note: the returned pointer does not seem to be used, so
+                 * this is ok. Silence warning with cast to uintptr. */
+                p = (uint8_t*) (uintptr_t) align;
         else {
                 r = message_peek_body(m, &m->rindex, align, sz, &p);
                 if (r < 0)

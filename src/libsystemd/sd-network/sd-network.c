@@ -322,11 +322,15 @@ _public_ int sd_network_link_get_carrier_bound_by(int ifindex, int **ret) {
 }
 
 static int MONITOR_TO_FD(sd_network_monitor *m) {
-        return (int) (unsigned long) m - 1;
+        /* Cheri note: see FD_TO_MONITOR */
+        return (int) (uintptr_t) m - 1;
 }
 
 static sd_network_monitor* FD_TO_MONITOR(int fd) {
-        return (sd_network_monitor*) (unsigned long) (fd + 1);
+        /* Cheri note: The pointer returned here is not a real pointer and does
+         * not seem to be used directly, so the cast is ok but results in a
+         * cheri compiler warning. To silence this warning we cast to uintptr_t first. */
+        return (sd_network_monitor*) (uintptr_t) (fd + 1);
 }
 
 static int monitor_add_inotify_watch(int fd) {
