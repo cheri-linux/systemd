@@ -29,7 +29,7 @@ int clock_get_hwclock(struct tm *tm) {
 
         /* This leaves the timezone fields of struct tm
          * uninitialized! */
-        if (ioctl(fd, RTC_RD_TIME, tm) < 0)
+        if (ioctl(fd, RTC_RD_TIME, (void*) tm) < 0)
                 return -errno;
 
         /* We don't know daylight saving, so we reset this in order not
@@ -48,7 +48,7 @@ int clock_set_hwclock(const struct tm *tm) {
         if (fd < 0)
                 return -errno;
 
-        if (ioctl(fd, RTC_SET_TIME, tm) < 0)
+        if (ioctl(fd, RTC_SET_TIME, (void *)tm) < 0)
                 return -errno;
 
         return 0;

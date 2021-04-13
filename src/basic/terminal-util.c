@@ -1315,7 +1315,7 @@ int vt_restore(int fd) {
                         q = r;
         }
 
-        if (ioctl(fd, VT_SETMODE, &mode) < 0) {
+        if (ioctl(fd, VT_SETMODE, (void*) &mode) < 0) {
                 log_debug_errno(errno, "Failed to set VT_AUTO mode, ignoring: %m");
                 if (q >= 0)
                         q = -errno;
