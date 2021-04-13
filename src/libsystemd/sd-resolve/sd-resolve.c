@@ -930,6 +930,7 @@ int resolve_getaddrinfo_with_destroy_callback(
 
         _cleanup_(sd_resolve_query_unrefp) sd_resolve_query *q = NULL;
         size_t node_len, service_len;
+        bool hints_valid;
         AddrInfoRequest req = {};
         struct iovec iov[3];
         struct msghdr mh = {};
@@ -950,6 +951,7 @@ int resolve_getaddrinfo_with_destroy_callback(
 
         node_len = node ? strlen(node) + 1 : 0;
         service_len = service ? strlen(service) + 1 : 0;
+        hints_valid = hints ? true : false;
 
         req = (AddrInfoRequest) {
                 .node_len = node_len,
@@ -959,7 +961,7 @@ int resolve_getaddrinfo_with_destroy_callback(
                 .header.type = REQUEST_ADDRINFO,
                 .header.length = sizeof(AddrInfoRequest) + node_len + service_len,
 
-                .hints_valid = hints,
+                .hints_valid = hints_valid,
                 .ai_flags = hints ? hints->ai_flags : 0,
                 .ai_family = hints ? hints->ai_family : 0,
                 .ai_socktype = hints ? hints->ai_socktype : 0,
