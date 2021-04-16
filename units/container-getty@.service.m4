@@ -28,7 +28,7 @@ Before=rescue.service
 # The '-o' option value tells agetty to replace 'login' arguments with an
 # option to preserve environment (-p), followed by '--' for safety, and then
 # the entered username.
-ExecStart=-/sbin/agetty -o '-p -- \\u' --noclear --keep-baud pts/%I 115200,38400,9600 $TERM
+ExecStart=-/cheri/usr/sbin/agetty -o '-p -- \\u' --noclear --keep-baud pts/%I 115200,38400,9600 $TERM
 Type=idle
 Restart=always
 RestartSec=0

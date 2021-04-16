@@ -20,4 +20,4 @@ ConditionFileNotEmpty=|!/etc/ld.so.cache
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/sbin/ldconfig -X
+ExecStart=/cheri/sbin/ldconfig -X

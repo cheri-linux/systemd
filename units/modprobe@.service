@@ -17,4 +17,4 @@ ConditionPathExists=!/sys/module/%I
 
 [Service]
 Type=oneshot
-ExecStart=-/sbin/modprobe -abq %I
+ExecStart=-/cheri/sbin/modprobe -abq %I
