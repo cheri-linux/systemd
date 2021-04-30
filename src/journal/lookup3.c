@@ -52,6 +52,10 @@ on 1 byte), but shoehorning those bytes into integers efficiently is messy.
 _Pragma("GCC diagnostic ignored \"-Wimplicit-fallthrough\"")
 #endif
 
+#ifndef __CHERI_PURE_CAPABILITY__
+# define __CHERI_PURE_CAPABILITY__ 0
+#endif
+
 /*
  * My best guess at if you are big-endian or little-endian.  This may
  * need adjustment.
